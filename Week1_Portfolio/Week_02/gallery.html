@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Image Gallery</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f2fc;
+    color: #1f1740;
+    padding: 40px 20px;
+}
+
+h1 { text-align: center; font-size: 36px; margin-bottom: 8px; }
+.sub { text-align: center; color: #5d5878; margin-bottom: 36px; }
+
+/* ---------- Grid ---------- */
+.gallery {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    cursor: pointer;
+    aspect-ratio: 4 / 3;
+    box-shadow: 0 6px 20px rgba(42, 23, 102, 0.15);
+}
+
+.item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease, filter 0.5s ease;
+}
+
+/* Hover animations */
+.item:hover img { transform: scale(1.12) rotate(1deg); filter: brightness(0.7); }
+
+.item .caption {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 14px;
+    color: #fff;
+    font-weight: bold;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+    transform: translateY(100%);
+    transition: transform 0.35s ease;
+}
+.item:hover .caption,
+.item:focus-visible .caption { transform: translateY(0); }
+.item:focus-visible { outline: 3px solid #ffb627; }
+
+/* ---------- Lightbox ---------- */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 6, 25, 0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 100;
+}
+.lightbox.open { display: flex; }
+
+.lightbox img {
+    max-width: 90vw;
+    max-height: 78vh;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    animation: zoomIn 0.3s ease;
+}
+@keyframes zoomIn { from { opacity: 0; transform: scale(0.85); } }
+
+.lightbox p { color: #fff; margin-top: 14px; font-size: 18px; }
+
+.lb-btn {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border: none;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.lb-btn:hover { background: #ffb627; color: #1f1740; }
+.lb-close { top: 20px; right: 24px; }
+.lb-prev { left: 20px; top: 50%; }
+.lb-next { right: 20px; top: 50%; }
+
+@media (max-width: 900px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 600px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<h1>My Photo Gallery</h1>
+<p class="sub">Click any picture to view it larger.</p>
+
+<!-- Replace the src values with your own images (e.g. images/photo1.jpg) -->
+<div class="gallery" id="gallery">
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1015/800/600" alt="River valley"><div class="caption">River valley</div></div>
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1018/800/600" alt="Mountains"><div class="caption">Mountains</div></div>
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1025/800/600" alt="Pug dog"><div class="caption">Pug dog</div></div>
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1039/800/600" alt="Waterfall"><div class="caption">Waterfall</div></div>
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1043/800/600" alt="Sea shore"><div class="caption">Sea shore</div></div>
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1056/800/600" alt="City lights"><div class="caption">City lights</div></div>
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1069/800/600" alt="Jellyfish"><div class="caption">Jellyfish</div></div>
+    <div class="item" tabindex="0"><img src="https://picsum.photos/id/1074/800/600" alt="Lion"><div class="caption">Lion</div></div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-modal="true" role="dialog">
+    <button class="lb-btn lb-close" id="close" aria-label="Close">&times;</button>
+    <button class="lb-btn lb-prev" id="prev" aria-label="Previous">&#10094;</button>
+    <button class="lb-btn lb-next" id="next" aria-label="Next">&#10095;</button>
+    <img id="lb-img" src="" alt="">
+    <p id="lb-caption"></p>
+</div>
+
+<script>
+const items = document.querySelectorAll(".item");
+const lightbox = document.getElementById("lightbox");
+const lbImg = document.getElementById("lb-img");
+const lbCaption = document.getElementById("lb-caption");
+let current = 0;
+
+function show(index) {
+    current = (index + items.length) % items.length;      // wrap around
+    const img = items[current].querySelector("img");
+    lbImg.src = img.src.replace("/800/600", "/1400/1000"); // bigger version
+    lbImg.alt = img.alt;
+    lbCaption.textContent = img.alt + "  (" + (current + 1) + " / " + items.length + ")";
+}
+
+function openBox(index) { show(index); lightbox.classList.add("open"); }
+function closeBox() { lightbox.classList.remove("open"); }
+
+items.forEach((item, i) => {
+    item.addEventListener("click", () => openBox(i));
+    item.addEventListener("keydown", e => { if (e.key === "Enter") openBox(i); });
+});
+
+document.getElementById("close").addEventListener("click", closeBox);
+document.getElementById("prev").addEventListener("click", () => show(current - 1));
+document.getElementById("next").addEventListener("click", () => show(current + 1));
+
+// click on dark background closes
+lightbox.addEventListener("click", e => { if (e.target === lightbox) closeBox(); });
+
+// keyboard controls
+document.addEventListener("keydown", e => {
+    if (!lightbox.classList.contains("open")) return;
+    if (e.key === "Escape") closeBox();
+    if (e.key === "ArrowLeft") show(current - 1);
+    if (e.key === "ArrowRight") show(current + 1);
+});
+</script>
+</body>
+</html>
