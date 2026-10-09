@@ -155,7 +155,10 @@ weatherForm.addEventListener("submit", async (event) => {
                 throw new Error("City not found. Check the spelling and try again.");
             }
             if (response.status === 401) {
-                throw new Error("The API key was rejected. Check that it is active and entered correctly.");
+                throw new Error(
+                    "OpenWeather rejected this API key. Check that you copied the full key from the correct account. " +
+                    "A newly created key may take up to 2 hours to activate; wait, then try again."
+                );
             }
             throw new Error(data.message || "OpenWeather could not complete the search.");
         }
