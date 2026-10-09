@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Look up current weather conditions, temperature, humidity, and wind for a city.">
+    <meta name="theme-color" content="#17132f">
+    <title>Weather App | Maheswari Guttula</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar" aria-label="Main navigation">
+            <a class="brand" href="index.html">Maheswari<span>.</span></a>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Open navigation menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-panel" id="site-navigation">
+                <ul class="nav-links">
+                    <li><a href="../Week_02/index.html">Projects home</a></li>
+                    <li><a href="../Week_02/clock.html">Digital clock</a></li>
+                    <li><a href="../Week_02/gallery.html">Image gallery</a></li>
+                    <li><a href="index.html" aria-current="page">Weather app</a></li>
+                </ul>
+                <button class="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch theme">☀</button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="weather-main">
+        <section class="weather-shell" aria-labelledby="page-title">
+            <div class="page-intro">
+                <p class="eyebrow">Weather, wherever you are</p>
+                <h1 id="page-title">A clearer view<br><span>of today.</span></h1>
+                <p class="intro-copy">Look up current conditions for a city and get the details you need at a glance.</p>
+            </div>
+
+            <section class="weather-card" aria-label="City weather search">
+                <form id="weatherForm" class="search-form">
+                    <label for="cityInput">City</label>
+                    <div class="search-box">
+                        <input type="text" id="cityInput" name="city" placeholder="Try Tokyo, London, or Mumbai" autocomplete="address-level2" required>
+                        <button id="searchBtn" class="search-button" type="submit">
+                            <span class="search-button-text">Search weather</span>
+                            <span class="button-arrow" aria-hidden="true">→</span>
+                        </button>
+                    </div>
+                </form>
+
+                <details class="api-key-details">
+                    <summary>Connect your OpenWeather API key</summary>
+                    <label for="apiKeyInput">OpenWeather API key</label>
+                    <input type="password" id="apiKeyInput" autocomplete="off" spellcheck="false" placeholder="Paste your API key">
+                    <p>Your key stays in this page and is sent to OpenWeather with each search. It is not saved by this app.</p>
+                </details>
+
+                <p id="errorMessage" class="error-message" role="alert" aria-live="assertive"></p>
+                <p id="loadingMessage" class="loading-message" role="status" aria-live="polite" hidden>Looking up current conditions…</p>
+
+                <section id="weatherResult" class="weather-result" aria-labelledby="cityName" aria-live="polite" hidden>
+                    <div class="weather-overview">
+                        <div>
+                            <p class="result-eyebrow">Current conditions</p>
+                            <h2 id="cityName"></h2>
+                            <p id="condition" class="condition"></p>
+                        </div>
+                        <div class="weather-icon" id="weatherIcon" aria-hidden="true">☀</div>
+                    </div>
+                    <div class="temperature-row">
+                        <p id="temperature" class="temperature"></p>
+                        <p class="temperature-caption">Air temperature</p>
+                    </div>
+                    <dl class="weather-details">
+                        <div class="detail-box">
+                            <dt><span aria-hidden="true">◌</span> Humidity</dt>
+                            <dd id="humidity"></dd>
+                        </div>
+                        <div class="detail-box">
+                            <dt><span aria-hidden="true">≈</span> Feels like</dt>
+                            <dd id="feelsLike"></dd>
+                        </div>
+                        <div class="detail-box">
+                            <dt><span aria-hidden="true">↗</span> Wind</dt>
+                            <dd id="wind"></dd>
+                        </div>
+                    </dl>
+                </section>
+                <p class="privacy-note">Weather data is provided by OpenWeather. Search requires an API key.</p>
+            </section>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Designed and built by <strong>Maheswari Guttula</strong></p>
+        <p>© <span id="currentYear">2026</span> Maheswari Guttula. All rights reserved.</p>
+    </footer>
+</body>
+</html>

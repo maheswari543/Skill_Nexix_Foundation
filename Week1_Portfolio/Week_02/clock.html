@@ -1,156 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Digital Clock and Countdown Timer</title>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(135deg, #2a1766, #6c4cf1);
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-    padding: 30px 16px;
-}
-
-.card {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(8px);
-    border-radius: 22px;
-    padding: 30px 36px;
-    text-align: center;
-    width: 100%;
-    max-width: 620px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-}
-
-h2 { font-size: 20px; font-weight: normal; opacity: 0.9; margin-bottom: 14px; }
-
-/* ---------- Clock ---------- */
-#clock {
-    font-family: "Courier New", monospace;
-    font-size: clamp(44px, 12vw, 84px);
-    font-weight: bold;
-    letter-spacing: 4px;
-    color: #ffb627;
-}
-#date { margin-top: 8px; font-size: 18px; opacity: 0.9; }
-
-/* ---------- Countdown ---------- */
-.target { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-.target input {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    font-size: 15px;
-}
-.target button {
-    padding: 9px 18px;
-    border: none;
-    border-radius: 8px;
-    background: #ffb627;
-    color: #2a1766;
-    font-weight: bold;
-    cursor: pointer;
-}
-.target button:hover { background: #ffc757; }
-
-.boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-.box {
-    background: rgba(0, 0, 0, 0.25);
-    border-radius: 14px;
-    padding: 16px 6px;
-}
-.box strong { display: block; font-size: clamp(28px, 8vw, 46px); font-family: "Courier New", monospace; }
-.box span { font-size: 14px; opacity: 0.8; }
-
-#message { margin-top: 16px; font-size: 18px; min-height: 26px; color: #ffb627; font-weight: bold; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A live digital clock and a flexible countdown timer with quick presets.">
+    <meta name="theme-color" content="#17132f">
+    <title>Digital Clock &amp; Countdown | Maheswari Guttula</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/clock.css">
+    <script src="js/main.js" defer></script>
+    <script src="js/clock.js" defer></script>
 </head>
 <body>
+    <header class="site-header">
+        <nav class="navbar container" aria-label="Main navigation">
+            <a class="brand" href="index.html">Maheswari<span>.</span></a>
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" aria-label="Open navigation menu">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-panel" id="site-navigation">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="clock.html" aria-current="page">Digital Clock</a></li>
+                    <li><a href="gallery.html">Image Gallery</a></li>
+                </ul>
+                <button class="theme-toggle" type="button" aria-label="Switch to light theme" title="Switch theme">☀</button>
+            </div>
+        </nav>
+    </header>
 
-<!-- Live clock -->
-<div class="card">
-    <h2>Current time</h2>
-    <div id="clock">00:00:00</div>
-    <div id="date"></div>
-</div>
+    <main class="page-main container clock-page">
+        <section class="page-intro" aria-labelledby="page-title">
+            <p class="eyebrow">Make every moment count</p>
+            <h1 id="page-title">Digital Clock <span>&amp; Countdown</span></h1>
+            <p>A live look at the time, plus a countdown you can set for any upcoming moment.</p>
+        </section>
 
-<!-- Countdown timer -->
-<div class="card">
-    <h2 id="target-title">Countdown to New Year</h2>
+        <section class="glass-card live-clock-card" aria-labelledby="clock-heading">
+            <div class="card-heading">
+                <div><p class="eyebrow">Right now</p><h2 id="clock-heading">Current time</h2></div>
+                <span class="live-indicator"><span aria-hidden="true"></span> LIVE</span>
+            </div>
+            <div class="clock-reading" aria-label="Current local time">
+                <time id="clock-time">00:00</time>
+                <span id="clock-period" class="clock-period">AM</span>
+            </div>
+            <p id="clock-date" class="clock-date" aria-live="off"></p>
+        </section>
 
-    <div class="target">
-        <label for="target-date">Choose a date:</label>
-        <input type="datetime-local" id="target-date">
-        <button id="set-btn">Start countdown</button>
-    </div>
+        <section class="glass-card countdown-card" aria-labelledby="countdown-heading">
+            <div class="card-heading">
+                <div><p class="eyebrow">Your next milestone</p><h2 id="countdown-heading">Countdown timer</h2></div>
+                <span class="timer-icon" aria-hidden="true">✳</span>
+            </div>
 
-    <div class="boxes">
-        <div class="box"><strong id="days">00</strong><span>Days</span></div>
-        <div class="box"><strong id="hours">00</strong><span>Hours</span></div>
-        <div class="box"><strong id="minutes">00</strong><span>Minutes</span></div>
-        <div class="box"><strong id="seconds">00</strong><span>Seconds</span></div>
-    </div>
-    <div id="message"></div>
-</div>
+            <form id="countdown-form" class="countdown-form" novalidate>
+                <div class="date-field">
+                    <label for="target-date">Choose a date and time</label>
+                    <input id="target-date" name="targetDate" type="datetime-local" required>
+                </div>
+                <button class="button button-primary" id="start-button" type="submit">Start countdown</button>
+            </form>
+            <p class="field-message" id="countdown-message" role="status" aria-live="polite">Choose a date and time, or pick a quick option.</p>
 
-<script>
-// add a leading zero: 5 -> "05"
-function pad(n) { return String(n).padStart(2, "0"); }
+            <div class="quick-options" aria-label="Quick countdown options">
+                <span>Quick start</span>
+                <button class="quick-button" type="button" data-quick="new-year">New Year</button>
+                <button class="quick-button" type="button" data-quick="tomorrow">Tomorrow</button>
+                <button class="quick-button" type="button" data-quick="hour">One hour</button>
+            </div>
 
-/* ---------- Live clock (HH:MM:SS) ---------- */
-function updateClock() {
-    const now = new Date();
-    document.getElementById("clock").textContent =
-        pad(now.getHours()) + ":" + pad(now.getMinutes()) + ":" + pad(now.getSeconds());
-    document.getElementById("date").textContent = now.toLocaleDateString("en-IN", {
-        weekday: "long", year: "numeric", month: "long", day: "numeric"
-    });
-}
+            <div class="countdown-units" aria-label="Time remaining" aria-live="off">
+                <div class="time-unit"><strong id="days">00</strong><span>Days</span></div>
+                <div class="time-unit"><strong id="hours">00</strong><span>Hours</span></div>
+                <div class="time-unit"><strong id="minutes">00</strong><span>Minutes</span></div>
+                <div class="time-unit"><strong id="seconds">00</strong><span>Seconds</span></div>
+            </div>
 
-/* ---------- Countdown ---------- */
-// default target: next New Year (1 January, 00:00)
-let target = new Date(new Date().getFullYear() + 1, 0, 1, 0, 0, 0);
+            <div class="progress-section">
+                <div class="progress-label"><span>Countdown progress</span><span id="progress-value">0%</span></div>
+                <div class="progress-track" id="countdown-progress" role="progressbar" aria-label="Countdown elapsed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                    <span id="progress-fill"></span>
+                </div>
+            </div>
 
-function updateCountdown() {
-    const diff = target - new Date();          // milliseconds left
-    const msg = document.getElementById("message");
+            <div class="timer-controls" aria-label="Countdown controls">
+                <button class="button button-primary" id="timer-start" type="button">Start</button>
+                <button class="button button-secondary" id="timer-pause" type="button" disabled>Pause</button>
+                <button class="button button-secondary" id="timer-resume" type="button" disabled>Resume</button>
+                <button class="button button-quiet" id="timer-reset" type="button">Reset</button>
+            </div>
+        </section>
+    </main>
 
-    if (diff <= 0) {
-        ["days", "hours", "minutes", "seconds"].forEach(id => document.getElementById(id).textContent = "00");
-        msg.textContent = "Time is up!";
-        return;
-    }
-    msg.textContent = "";
-
-    const totalSeconds = Math.floor(diff / 1000);
-    document.getElementById("days").textContent = pad(Math.floor(totalSeconds / 86400));
-    document.getElementById("hours").textContent = pad(Math.floor((totalSeconds % 86400) / 3600));
-    document.getElementById("minutes").textContent = pad(Math.floor((totalSeconds % 3600) / 60));
-    document.getElementById("seconds").textContent = pad(totalSeconds % 60);
-}
-
-document.getElementById("set-btn").addEventListener("click", () => {
-    const value = document.getElementById("target-date").value;
-    if (!value) { document.getElementById("message").textContent = "Please choose a date and time."; return; }
-    target = new Date(value);
-    document.getElementById("target-title").textContent = "Countdown to " + target.toLocaleString("en-IN");
-    updateCountdown();
-});
-
-// run once now, then every 1 second
-updateClock();
-updateCountdown();
-setInterval(() => { updateClock(); updateCountdown(); }, 1000);
-</script>
+    <footer class="site-footer"><div class="container footer-inner"><p>Designed and built by <strong>Maheswari Guttula</strong></p><p>© <span data-current-year>2026</span> Maheswari Guttula. All rights reserved.</p></div></footer>
 </body>
 </html>

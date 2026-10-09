@@ -1,0 +1,63 @@
+.gallery-page { max-width: 1200px; }
+.gallery-intro { margin-bottom: 34px; }
+.gallery-tools { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 18px; }
+.filter-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-button { padding: 8px 14px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); background: var(--surface); font-size: 0.84rem; font-weight: 600; cursor: pointer; transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease; }
+.filter-button:hover { transform: translateY(-1px); color: var(--ink); border-color: var(--purple); }
+.filter-button.is-active { color: #fff; border-color: transparent; background: linear-gradient(120deg, var(--purple-strong), var(--indigo)); }
+:root[data-theme="light"] .filter-button.is-active { color: #fff; }
+.search-field { width: min(100%, 270px); height: 42px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.search-field > span { color: var(--gold); font-size: 1.4rem; line-height: 1; }
+.search-field input { width: 100%; min-width: 0; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 0.87rem; }
+.search-field input::placeholder { color: var(--muted); }
+.search-field:focus-within { outline: 2px solid var(--purple); outline-offset: 2px; }
+.gallery-count { margin: 0 0 13px; color: var(--muted); font-size: 0.83rem; }
+.gallery-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.gallery-card { min-width: 0; overflow: hidden; padding: 0; border: 1px solid var(--line); border-radius: 17px; color: inherit; background: var(--surface); text-align: left; cursor: pointer; box-shadow: 0 10px 28px rgba(4, 3, 18, 0.16); transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease; animation: card-appear 350ms ease both; }
+.gallery-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--purple) 58%, var(--line)); box-shadow: var(--shadow); }
+.gallery-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+.gallery-image-wrap { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; background: linear-gradient(135deg, #282146, #5144ba 55%, #a694ff); }
+.gallery-image-wrap::after { position: absolute; inset: 0; content: ""; background: linear-gradient(0deg, rgba(9, 7, 20, 0.48), transparent 48%); pointer-events: none; }
+.gallery-image { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform 450ms cubic-bezier(.2,.7,.2,1), opacity 250ms ease; }
+.gallery-card:hover .gallery-image { transform: scale(1.06); }
+.gallery-image.is-loading { opacity: 0.25; }
+.gallery-image.is-failed { display: none; }
+.image-fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 18px; color: #fff; text-align: center; font-size: 0.9rem; }
+.gallery-image-wrap .image-fallback { z-index: 1; }
+.gallery-card-info { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 15px 15px; }
+.gallery-card-info strong { display: block; font-family: "Manrope", sans-serif; font-size: 0.96rem; }
+.gallery-card-info span { color: var(--muted); font-size: 0.77rem; }
+.gallery-category { flex: 0 0 auto; padding: 5px 8px; border: 1px solid var(--line); border-radius: 99px; color: var(--purple) !important; }
+.empty-state { padding: 48px 14px; color: var(--muted); text-align: center; }
+
+.lightbox { position: fixed; z-index: 50; inset: 0; display: grid; grid-template-columns: 72px minmax(0, 1fr) 72px; align-items: center; justify-items: center; padding: 40px 16px; background: rgba(9, 7, 22, 0.94); backdrop-filter: blur(14px); animation: fade-in 180ms ease both; }
+.lightbox-figure { width: min(100%, 1000px); margin: 0; text-align: center; }
+.lightbox-image-wrap { position: relative; width: 100%; min-height: 200px; display: grid; place-items: center; }
+.lightbox-figure img { max-width: 100%; max-height: min(72vh, 760px); display: block; border-radius: 12px; object-fit: contain; box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48); animation: image-enter 220ms ease both; }
+.lightbox-figure figcaption { margin-top: 16px; color: #fff; font-family: "Manrope", sans-serif; font-size: 1.1rem; font-weight: 700; }
+.lightbox-count { margin: 4px 0 0; color: #c5c0d8; font-size: 0.85rem; }
+.lightbox-button { width: 48px; height: 48px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 50%; color: #fff; background: rgba(255, 255, 255, 0.1); font-size: 2rem; line-height: 1; cursor: pointer; transition: color 150ms ease, background 150ms ease, transform 150ms ease; }
+.lightbox-button:hover { transform: scale(1.06); color: #211b3c; background: var(--gold); }
+.lightbox-close { position: absolute; top: 22px; right: 24px; font-size: 1.7rem; }
+.lightbox-prev, .lightbox-next { justify-self: center; }
+
+@keyframes card-appear { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes image-enter { from { opacity: 0.6; transform: scale(0.985); } to { opacity: 1; transform: scale(1); } }
+
+@media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+    .gallery-page { padding-top: 42px; }
+    .gallery-tools { align-items: stretch; flex-direction: column; }
+    .search-field { width: 100%; }
+    .gallery-grid { gap: 12px; }
+    .gallery-card-info { align-items: flex-start; flex-direction: column; gap: 7px; padding: 11px; }
+    .lightbox { grid-template-columns: 42px minmax(0, 1fr) 42px; gap: 4px; padding: 65px 8px 28px; }
+    .lightbox-button { width: 38px; height: 38px; font-size: 1.5rem; }
+    .lightbox-close { top: 14px; right: 14px; }
+    .lightbox-figure img { max-height: 66vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gallery-card, .gallery-image, .lightbox, .lightbox-figure img { animation: none !important; transition: none !important; }
+}
