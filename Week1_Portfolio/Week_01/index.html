@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Maheswari Guttula - Computer Science Engineering student portfolio">
-    <title>Maheswari Guttula | Portfolio</title>
+    <meta name="description" content="Maheswari Guttula - Computer Science and Engineering student and aspiring Full Stack Developer">
+    <title>Maheswari Guthula | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -15,45 +15,42 @@
 <!-- ============ HEADER ============ -->
 <header class="site-header" id="top">
     <nav class="navbar">
-        <a href="#top" class="logo">Maheswari<span>.</span></a>
+        <a href="#top" class="logo">Maheswari<span></span></a>
 
-        <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+        <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-controls="primary-navigation" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
 
-        <ul class="nav-links">
+        <ul class="nav-links" id="primary-navigation">
+            <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#education">Education</a></li>
             <li><a href="#skills">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
+            <li><a href="#education">Education</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><button class="theme-toggle" aria-label="Switch light or dark theme">🌙</button></li>
+            <li><button class="theme-toggle" type="button" aria-label="Switch to light theme">☀️</button></li>
         </ul>
     </nav>
 
-    <div class="hero">
+    <div class="hero" id="home">
         <div class="hero-text">
             <p class="hello">Hello, I'm</p>
-            <h1>Maheswari <br>Guttula</h1>
-            <h2>Computer Science Engineering Student</h2>
+            <h1>Maheswari<br>Guthula</h1>
+            <h2>Computer Science and Engineering Student<br>Aspiring Full Stack Developer</h2>
             <p class="hero-desc">
-                I build websites and explore data with Python.
-                Always learning something new.
+                I enjoy building responsive web experiences and learning how technology
+                can solve everyday problems.
             </p>
             <div class="hero-buttons">
-                <a href="#projects" class="btn btn-primary">View my projects</a>
-                <a href="#contact" class="btn btn-outline">Contact me</a>
+                <a href="#projects" class="btn btn-primary">View Projects</a>
+                <a href="#contact" class="btn btn-outline">Contact Me</a>
             </div>
         </div>
 
         <div class="hero-image">
             <div class="photo-frame">
-                <img src="profile.jpeg" alt="Profile photo of Maheswari Guttula">
+                <img src="profile.jpeg" alt="Profile photo of Maheswari Guthula">
             </div>
-            <span class="chip chip-1">HTML</span>
-            <span class="chip chip-2">Python</span>
-            <span class="chip chip-3">Java</span>
-            <span class="chip chip-4">MySQL</span>
         </div>
     </div>
 </header>
@@ -66,22 +63,24 @@
         <div class="about-grid">
             <div class="about-text">
                 <p>
-                    I am Maheswari Guttula, pursuing my B.Tech in Computer Science and
+                    I am Maheswari Guthula, pursuing my B.Tech in Computer Science and
                     Engineering at Bonam Venkata Chalamayya Engineering College.
                 </p>
                 <p>
-                    I know HTML, CSS, Python, MySQL, Java and Git, and I enjoy web
-                    development and software development.
+                    My current skills include HTML, CSS, basic JavaScript, Python,
+                    MySQL,Java and Git. I am working toward my goal of becoming a Full
+                    Stack Developer.
                 </p>
                 <p>
-                    I learn quickly, work hard, and like improving my technical skills
-                    with every project.
+                    I am a quick learner, hardworking and a team player, and I am eager to
+                    learn new technologies. Outside of my studies, I enjoy learning new
+                    concepts and playing badminton.
                 </p>
             </div>
             <div class="stats">
-                <div class="stat"><strong>8.54</strong><span>Current CGPA</span></div>
-                <div class="stat"><strong>3</strong><span>Projects built</span></div>
-                <div class="stat"><strong>6</strong><span>Technologies</span></div>
+                <div class="stat"><strong>8.54</strong><span>CGPA</span></div>
+                <div class="stat"><strong>3</strong><span>Projects featured</span></div>
+                <div class="stat"><strong>2027</strong><span>Graduation year</span></div>
             </div>
         </div>
     </section>
@@ -129,37 +128,37 @@
             <div class="skill-card">
                 <div class="skill-head"><h3>HTML</h3><span>Good</span></div>
                 <p>Page structure, semantic tags and forms.</p>
-                <div class="bar"><i style="--level:80%"></i></div>
+                <div class="bar" role="progressbar" aria-label="HTML skill level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75"><i style="--level:75%"></i></div>
             </div>
 
             <div class="skill-card">
                 <div class="skill-head"><h3>CSS</h3><span>Good</span></div>
                 <p>Styling, layouts, Flexbox, Grid and responsive design.</p>
-                <div class="bar"><i style="--level:75%"></i></div>
+                <div class="bar" role="progressbar" aria-label="CSS skill level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70"><i style="--level:70%"></i></div>
             </div>
 
             <div class="skill-card">
                 <div class="skill-head"><h3>Python</h3><span>Basic</span></div>
-                <p>Functions, loops and object-oriented programming.</p>
-                <div class="bar"><i style="--level:60%"></i></div>
+                <p>Basic syntax, variables, loops and functions.</p>
+                <div class="bar" role="progressbar" aria-label="Python skill level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="45"><i style="--level:45%"></i></div>
             </div>
 
             <div class="skill-card">
                 <div class="skill-head"><h3>MySQL</h3><span>Basic</span></div>
-                <p>SQL queries, tables and databases.</p>
-                <div class="bar"><i style="--level:55%"></i></div>
+                <p>Basic queries, tables and database concepts.</p>
+                <div class="bar" role="progressbar" aria-label="MySQL skill level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"><i style="--level:40%"></i></div>
             </div>
 
             <div class="skill-card">
-                <div class="skill-head"><h3>Java</h3><span>Basic</span></div>
-                <p>Java programming and object-oriented concepts.</p>
-                <div class="bar"><i style="--level:55%"></i></div>
+                <div class="skill-head"><h3>JavaScript</h3><span>Basic</span></div>
+                <p>Basic interactivity, events and working with APIs.</p>
+                <div class="bar" role="progressbar" aria-label="JavaScript skill level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"><i style="--level:40%"></i></div>
             </div>
 
             <div class="skill-card">
                 <div class="skill-head"><h3>Git</h3><span>Basic</span></div>
                 <p>Version control and working with repositories.</p>
-                <div class="bar"><i style="--level:50%"></i></div>
+                <div class="bar" role="progressbar" aria-label="Git skill level" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40"><i style="--level:40%"></i></div>
             </div>
 
         </div>
@@ -172,20 +171,23 @@
 
             <article class="project-card">
                 <h3>DocSpot</h3>
-                <p>A healthcare appointment booking website where users can view doctors and book appointments.</p>
-                <ul class="tags"><li>HTML</li><li>CSS</li></ul>
+                <p>A doctor appointment booking website. I contributed to its frontend using HTML and CSS, including responsive web pages.</p>
+                <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Git</li></ul>
+                <a class="project-link" href="https://github.com/maheswari543?tab=repositories" target="_blank" rel="noopener noreferrer" aria-label="Browse Maheswari's GitHub repositories for DocSpot">Browse GitHub repositories <span aria-hidden="true">↗</span></a>
             </article>
 
             <article class="project-card">
                 <h3>Wellness Marketplace</h3>
-                <p>A wellness marketplace for alternative therapies, practitioners, products and community interaction.</p>
-                <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                <p>A wellness platform with login, dashboard, practitioner booking, Ayurvedic products, Q&amp;A and chatbot features.</p>
+                <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>Git</li></ul>
+                <a class="project-link" href="https://github.com/maheswari543?tab=repositories" target="_blank" rel="noopener noreferrer" aria-label="Browse Maheswari's GitHub repositories for Wellness Marketplace">Browse GitHub repositories <span aria-hidden="true">↗</span></a>
             </article>
 
             <article class="project-card">
-                <h3>Heart Disease Analysis</h3>
-                <p>A data analysis project that explores heart disease data and shows insights through visualizations.</p>
-                <ul class="tags"><li>Python</li><li>Tableau</li></ul>
+                <h3>Smart Road Safety Analytics</h3>
+                <p>A road safety analytics project that uses data visualization and a Tableau dashboard to present insights.</p>
+                <ul class="tags"><li>Data visualization</li><li>Tableau</li></ul>
+                <a class="project-link" href="https://github.com/maheswari543?tab=repositories" target="_blank" rel="noopener noreferrer" aria-label="Browse Maheswari's GitHub repositories for Smart Road Safety Analytics">Browse GitHub repositories <span aria-hidden="true">↗</span></a>
             </article>
 
         </div>
@@ -234,12 +236,6 @@
     </section>
 
 </main>
-
-<!-- ============ FOOTER ============ -->
-<footer>
-    <p>© 2026 Maheswari Guttula. All rights reserved.</p>
-    <p>Built with HTML, CSS and JavaScript</p>
-</footer>
 
 <script src="script.js"></script>
 </body>

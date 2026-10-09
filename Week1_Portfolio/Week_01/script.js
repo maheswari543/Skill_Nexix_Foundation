@@ -1,70 +1,116 @@
-// ---------- Dark / light theme ----------
 const root = document.documentElement;
-const themeBtn = document.querySelector(".theme-toggle");
+const themeButton = document.querySelector(".theme-toggle");
+const menuButton = document.querySelector(".menu-toggle");
+const navigation = document.querySelector(".nav-links");
 
 function setTheme(theme) {
     root.setAttribute("data-theme", theme);
-    themeBtn.textContent = theme === "dark" ? "☀️" : "🌙";
-    try { localStorage.setItem("theme", theme); } catch (e) {}
+    themeButton.textContent = theme === "dark" ? "☀️" : "🌙";
+    themeButton.setAttribute(
+        "aria-label",
+        theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
+    );
+
+    try {
+        localStorage.setItem("theme", theme);
+    } catch (error) {
+        // The selected theme still applies for this page view if storage is unavailable.
+    }
 }
 
-let saved = null;
-try { saved = localStorage.getItem("theme"); } catch (e) {}
-setTheme(saved || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+let savedTheme = null;
+try {
+    savedTheme = localStorage.getItem("theme");
+} catch (error) {
+    // Use the dark theme when browser storage is unavailable.
+}
+setTheme(savedTheme || "dark");
 
-themeBtn.addEventListener("click", () => {
-    setTheme(root.getAttribute("data-theme") === "dark" ? "light" : "dark");
+themeButton.addEventListener("click", () => {
+    const nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
 });
 
-// ---------- Mobile menu ----------
-const menuBtn = document.querySelector(".menu-toggle");
-const navLinks = document.querySelector(".nav-links");
+function closeMenu() {
+    navigation.classList.remove("open");
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Open navigation menu");
+}
 
-menuBtn.addEventListener("click", () => {
-    const open = navLinks.classList.toggle("open");
-    menuBtn.setAttribute("aria-expanded", open);
+menuButton.addEventListener("click", () => {
+    const isOpen = navigation.classList.toggle("open");
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+    menuButton.setAttribute(
+        "aria-label",
+        isOpen ? "Close navigation menu" : "Open navigation menu"
+    );
 });
-navLinks.querySelectorAll("a").forEach(a =>
-    a.addEventListener("click", () => {
-        navLinks.classList.remove("open");
-        menuBtn.setAttribute("aria-expanded", "false");
-    })
-);
 
-// ---------- Skill bars fill when visible ----------
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
+navigation.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+        closeMenu();
+    }
+});
+
+const skillCards = document.querySelectorAll(".skill-card");
+if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries, currentObserver) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                currentObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    skillCards.forEach((card) => observer.observe(card));
+} else {
+    skillCards.forEach((card) => card.classList.add("visible"));
+}
+
+const sections = document.querySelectorAll("#home, main section");
+const navigationLinks = document.querySelectorAll(".nav-links a");
+
+function updateActiveLink() {
+    let currentSection = "home";
+
+    sections.forEach((section) => {
+        if (window.scrollY >= section.offsetTop - 140) {
+            currentSection = section.id;
         }
     });
-}, { threshold: 0.3 });
 
-document.querySelectorAll(".skill-card").forEach(card => observer.observe(card));
-
-// ---------- Highlight current nav link ----------
-const sections = document.querySelectorAll("main section");
-const links = document.querySelectorAll(".nav-links a");
-
-window.addEventListener("scroll", () => {
-    let current = "";
-    sections.forEach(sec => {
-        if (window.scrollY >= sec.offsetTop - 140) current = sec.id;
+    navigationLinks.forEach((link) => {
+        const isActive = link.getAttribute("href") === `#${currentSection}`;
+        link.classList.toggle("active", isActive);
+        if (isActive) {
+            link.setAttribute("aria-current", "location");
+        } else {
+            link.removeAttribute("aria-current");
+        }
     });
-    links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + current));
-});
+}
 
-// ---------- Contact form: opens your email app with the message ----------
-document.getElementById("contact-form").addEventListener("submit", (e) => {
-    e.preventDefault();
+window.addEventListener("scroll", updateActiveLink, { passive: true });
+updateActiveLink();
+
+document.getElementById("contact-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+
     const name = document.getElementById("name").value.trim();
     const email = document.getElementById("email").value.trim();
     const message = document.getElementById("message").value.trim();
+    const subject = encodeURIComponent(`Portfolio message from ${name}`);
+    const body = encodeURIComponent(`${message}\n\nFrom: ${name} (${email})`);
 
-    const subject = encodeURIComponent("Portfolio message from " + name);
-    const body = encodeURIComponent(message + "\n\nFrom: " + name + " (" + email + ")");
-
-    window.location.href = "mailto:maheswariguttula112@gmail.com?subject=" + subject + "&body=" + body;
-    document.getElementById("form-note").textContent = "Opening your email app to send the message.";
+    document.getElementById("form-note").textContent =
+        "Opening your email app to send the message.";
+    window.location.href =
+        `mailto:maheswariguttula112@gmail.com?subject=${subject}&body=${body}`;
 });
+
+document.getElementById("current-year").textContent = new Date().getFullYear();
