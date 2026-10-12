@@ -431,17 +431,6 @@ h3 {
     padding: 0 18px 28px 0;
 }
 
-.photo-decoration {
-    position: absolute;
-    top: -22px;
-    right: -2px;
-    width: 60%;
-    height: 78%;
-    border: 1px solid var(--accent);
-    border-radius: 48% 48% 18px 18px;
-    opacity: 0.6;
-}
-
 .photo-frame {
     position: relative;
     overflow: hidden;
