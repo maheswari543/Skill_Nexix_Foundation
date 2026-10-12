@@ -1,30 +1,33 @@
 const root = document.documentElement;
 const themeButton = document.querySelector(".theme-toggle");
 const menuButton = document.querySelector(".menu-toggle");
-const navigation = document.querySelector(".nav-links");
+const navPanel = document.querySelector(".nav-panel");
+const navigationLinks = document.querySelectorAll(".nav-links a");
+const sections = document.querySelectorAll("main .page-section");
+const backToTop = document.querySelector(".back-to-top");
 
-function setTheme(theme) {
+function setTheme(theme, remember = true) {
     root.setAttribute("data-theme", theme);
-    themeButton.textContent = theme === "dark" ? "☀️" : "🌙";
-    themeButton.setAttribute(
-        "aria-label",
-        theme === "dark" ? "Switch to light theme" : "Switch to dark theme"
-    );
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    themeButton.setAttribute("aria-label", `Switch to ${nextTheme} theme`);
+    themeButton.setAttribute("title", `Switch to ${nextTheme} theme`);
 
-    try {
-        localStorage.setItem("theme", theme);
-    } catch (error) {
-        // The selected theme still applies for this page view if storage is unavailable.
+    if (remember) {
+        try {
+            localStorage.setItem("portfolio-theme", theme);
+        } catch (error) {
+            // Theme selection still works for this page view if storage is unavailable.
+        }
     }
 }
 
 let savedTheme = null;
 try {
-    savedTheme = localStorage.getItem("theme");
+    savedTheme = localStorage.getItem("portfolio-theme");
 } catch (error) {
-    // Use the dark theme when browser storage is unavailable.
+    // Fall back to the default dark theme if browser storage is unavailable.
 }
-setTheme(savedTheme || "dark");
+setTheme(savedTheme === "light" ? "light" : "dark", false);
 
 themeButton.addEventListener("click", () => {
     const nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
@@ -32,13 +35,13 @@ themeButton.addEventListener("click", () => {
 });
 
 function closeMenu() {
-    navigation.classList.remove("open");
+    navPanel.classList.remove("is-open");
     menuButton.setAttribute("aria-expanded", "false");
     menuButton.setAttribute("aria-label", "Open navigation menu");
 }
 
 menuButton.addEventListener("click", () => {
-    const isOpen = navigation.classList.toggle("open");
+    const isOpen = navPanel.classList.toggle("is-open");
     menuButton.setAttribute("aria-expanded", String(isOpen));
     menuButton.setAttribute(
         "aria-label",
@@ -46,7 +49,7 @@ menuButton.addEventListener("click", () => {
     );
 });
 
-navigation.querySelectorAll("a").forEach((link) => {
+navigationLinks.forEach((link) => {
     link.addEventListener("click", closeMenu);
 });
 
@@ -56,61 +59,100 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-const skillCards = document.querySelectorAll(".skill-card");
-if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries, currentObserver) => {
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const revealElements = document.querySelectorAll("[data-reveal]");
+
+if (!reduceMotion && "IntersectionObserver" in window) {
+    document.body.classList.add("reveal-ready");
+    const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                entry.target.classList.add("visible");
-                currentObserver.unobserve(entry.target);
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
 
-    skillCards.forEach((card) => observer.observe(card));
+    revealElements.forEach((element) => revealObserver.observe(element));
 } else {
-    skillCards.forEach((card) => card.classList.add("visible"));
+    revealElements.forEach((element) => element.classList.add("is-visible"));
 }
 
-const sections = document.querySelectorAll("#home, main section");
-const navigationLinks = document.querySelectorAll(".nav-links a");
-
-function updateActiveLink() {
-    let currentSection = "home";
+function updateActiveSection() {
+    const marker = window.innerHeight * 0.36;
+    let activeSection = sections[0];
 
     sections.forEach((section) => {
-        if (window.scrollY >= section.offsetTop - 140) {
-            currentSection = section.id;
+        const bounds = section.getBoundingClientRect();
+        if (bounds.top <= marker && bounds.bottom > marker) {
+            activeSection = section;
         }
     });
 
-    navigationLinks.forEach((link) => {
-        const isActive = link.getAttribute("href") === `#${currentSection}`;
-        link.classList.toggle("active", isActive);
-        if (isActive) {
-            link.setAttribute("aria-current", "location");
-        } else {
-            link.removeAttribute("aria-current");
-        }
-    });
+    if (activeSection) {
+        navigationLinks.forEach((link) => {
+            const isActive = link.getAttribute("href") === `#${activeSection.id}`;
+            if (isActive) {
+                link.setAttribute("aria-current", "location");
+            } else {
+                link.removeAttribute("aria-current");
+            }
+        });
+    }
+
+    backToTop.classList.toggle("is-visible", window.scrollY > 500);
 }
 
-window.addEventListener("scroll", updateActiveLink, { passive: true });
-updateActiveLink();
+window.addEventListener("scroll", updateActiveSection, { passive: true });
+window.addEventListener("resize", updateActiveSection);
+updateActiveSection();
 
-document.getElementById("contact-form").addEventListener("submit", (event) => {
+document.querySelectorAll('.project-button[href="#"]').forEach((link) => {
+    link.addEventListener("click", (event) => event.preventDefault());
+});
+
+const contactForm = document.getElementById("contact-form");
+const formStatus = document.getElementById("form-status");
+const submitButton = contactForm.querySelector('button[type="submit"]');
+
+contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    formStatus.removeAttribute("data-state");
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
-    const subject = encodeURIComponent(`Portfolio message from ${name}`);
-    const body = encodeURIComponent(`${message}\n\nFrom: ${name} (${email})`);
+    if (contactForm.action.includes("YOUR_FORM_ID")) {
+        formStatus.textContent =
+            "The form is ready, but it needs your Formspree form ID. Replace YOUR_FORM_ID in the form action to enable sending.";
+        formStatus.dataset.state = "error";
+        return;
+    }
 
-    document.getElementById("form-note").textContent =
-        "Opening your email app to send the message.";
-    window.location.href =
-        `mailto:maheswariguttula112@gmail.com?subject=${subject}&body=${body}`;
+    submitButton.disabled = true;
+    contactForm.setAttribute("aria-busy", "true");
+    formStatus.textContent = "Sending your message…";
+
+    try {
+        const response = await fetch(contactForm.action, {
+            method: "POST",
+            body: new FormData(contactForm),
+            headers: { Accept: "application/json" }
+        });
+
+        if (!response.ok) {
+            throw new Error("Your message could not be sent. Please try again or email me directly.");
+        }
+
+        contactForm.reset();
+        formStatus.textContent = "Thanks for reaching out! Your message has been sent.";
+        formStatus.dataset.state = "success";
+    } catch (error) {
+        formStatus.textContent = error instanceof Error
+            ? error.message
+            : "Your message could not be sent. Please try again or email me directly.";
+        formStatus.dataset.state = "error";
+    } finally {
+        submitButton.disabled = false;
+        contactForm.removeAttribute("aria-busy");
+    }
 });
 
 document.getElementById("current-year").textContent = new Date().getFullYear();
