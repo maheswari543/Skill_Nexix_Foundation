@@ -275,21 +275,6 @@ textarea:focus-visible {
     padding: 76px 0 108px;
 }
 
-.hero::before {
-    position: absolute;
-    z-index: -1;
-    top: 7%;
-    left: -18%;
-    width: min(58vw, 760px);
-    aspect-ratio: 1;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    content: "";
-    opacity: 0.42;
-    box-shadow: 0 0 0 70px color-mix(in srgb, var(--line) 35%, transparent), 0 0 0 140px color-mix(in srgb, var(--line) 22%, transparent);
-    pointer-events: none;
-}
-
 .hero-inner {
     display: grid;
     grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
